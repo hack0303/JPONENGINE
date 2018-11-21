@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+
+<project default="main" basedir="." name="JPONEngine" xmlns:ivy="antlib:org.apache.ivy.ant">
+
+<echo message="pulling in property files"/>
+<property file="build.properties"/>
+	
+<echo message="start"/>
+	<path id="lib.path.id">
+	<fileset dir="${lib.dir}"/>
+	</path>
+	<path id="run.path.id">
+	<path refid="lib.path.id"></path>
+	<path location="${build.dir}"/>
+	</path>
+	<target name="resolve" description="检查库">
+		<ivy:retrieve/>
+	</target>
+ <target name="main" depends="resolve">
+ </target>
+	<!--
+ <junit id="test" description="单元测试" dir="src">
+ </junit>
+ -->
+</project>
