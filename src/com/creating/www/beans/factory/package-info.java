@@ -5,4 +5,4 @@
  * @author Administrator
  *
  */
-package com.creating.www.parsers.fatory;
+package com.creating.www.beans.factory;

@@ -9,7 +9,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.creating.www.APP;
-import com.creating.www.beans.elecs.Location;
+import com.creating.www.beans.elecs.AlarmLocation;
 
 public class AlarmModel implements Delayed{
 static Logger logger=LogManager.getLogger(AlarmModel.class.getName());
@@ -17,7 +17,7 @@ private static  long DELAY_TIME=Long.valueOf((String) APP.appContext.getProperty
 private Integer id;
 private AlmBean almBean;
 private AlarmCode alarmCode;
-private Location location;
+private AlarmLocation location;
 private Date firstCreateTime;
 private Date receiveTime;
 private AlarmModel source;
@@ -40,10 +40,10 @@ public AlarmCode getAlarmCode() {
 public void setAlarmCode(AlarmCode alarmCode) {
 	this.alarmCode = alarmCode;
 }
-public Location getLocation() {
+public AlarmLocation getLocation() {
 	return location;
 }
-public void setLocation(Location location) {
+public void setLocation(AlarmLocation location) {
 	this.location = location;
 }
 public Date getFirstCreateTime() {

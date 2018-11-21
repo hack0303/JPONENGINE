@@ -1,5 +1,5 @@
 package com.creating.www.beans.elecs;
 
-public interface ElecInfo<T> {
-public T getInfo();
+public abstract class ElecInfo implements Info<String> {
+	public abstract String getInfo();
 }

@@ -1,6 +1,6 @@
 package com.creating.www.beans.elecs;
 
-public class ONU implements ElecInfo<String>{
+public class ONU extends ElecInfo{
 
 	@Override
 	public String getInfo() {

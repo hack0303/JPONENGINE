@@ -2,7 +2,7 @@ package com.creating.www.beans.elecs;
 
 import java.util.List;
 
-public class Location implements ElecInfo<List<Object>>{
+public class AlarmLocation implements Info<List<Object>>{
 	public List<Object> getLocationInfo() {
 		return locationInfo;
 	}

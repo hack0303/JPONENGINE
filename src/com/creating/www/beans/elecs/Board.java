@@ -1,6 +1,6 @@
 package com.creating.www.beans.elecs;
 
-public class Board implements ElecInfo<String>{
+public class Board extends ElecInfo{
 
 	@Override
 	public String getInfo() {

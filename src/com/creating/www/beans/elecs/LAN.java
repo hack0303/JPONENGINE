@@ -1,6 +1,6 @@
 package com.creating.www.beans.elecs;
 
-public class LAN implements ElecInfo<String>{
+public class LAN extends ElecInfo{
 
 	@Override
 	public String getInfo() {

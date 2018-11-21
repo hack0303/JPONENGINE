@@ -1,20 +1,18 @@
 package com.creating.www.parsers;
 
-import java.io.File;
-import java.util.List;
-
+import com.creating.www.beans.AlarmModel;
 import com.creating.www.beans.AlmBean;
 
-public class AlarmParser implements Parser<File,List<AlmBean>>{
+public class AlarmFileParser implements Parser<AlmBean,AlarmModel>{
 
 	@Override
-	public List<AlmBean> parse(File args0) {
+	public AlarmModel parse(AlmBean args0) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<AlmBean> parse() {
+	public AlarmModel parse() {
 		// TODO Auto-generated method stub
 		return null;
 	}

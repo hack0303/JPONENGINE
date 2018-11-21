@@ -1,6 +1,6 @@
 package com.creating.www.beans.elecs;
 
-public class PONInterface implements ElecInfo<String>{
+public class PONInterface extends ElecInfo{
 
 	@Override
 	public String getInfo() {

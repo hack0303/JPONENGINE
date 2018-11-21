@@ -2,7 +2,7 @@ package com.creating.www.beans.elecs.factory;
 
 import com.creating.www.beans.elecs.ElecUnit;
 
-public class ElecFactory implements IElecFactory {
+public class ElecFactory implements ElecFactoryI {
 
 	@Override
 	public ElecUnit newElecUnit() {

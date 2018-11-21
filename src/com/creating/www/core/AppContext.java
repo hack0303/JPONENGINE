@@ -14,6 +14,7 @@ public class AppContext {
 	 * */
 private  Properties ENVIRONMENT;
 private  Executor executor=Executors.newFixedThreadPool(10); 
+private static MODE sys_mode=null;
 public Executor getThreadPool() 
 {
 return executor;	
@@ -29,5 +30,9 @@ public Object getProperty(String key,String defaultValue)
     Object outter=getProperty(key);
     if(outter==null) return defaultValue;
     else return outter;
+}
+public void setENVIRONMENT(Properties ENVIRONMENT)
+{
+this.ENVIRONMENT=ENVIRONMENT;
 }
 }

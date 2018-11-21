@@ -1,6 +1,6 @@
 package com.creating.www.beans.elecs;
 
-public class NETUint implements ElecInfo<String>{
+public class NETUint extends ElecInfo{
 
 	@Override
 	public String getInfo() {
