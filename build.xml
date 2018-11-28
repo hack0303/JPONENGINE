@@ -2,24 +2,50 @@
 
 <project default="main" basedir="." name="JPONEngine" xmlns:ivy="antlib:org.apache.ivy.ant">
 
-<echo message="pulling in property files"/>
-<property file="build.properties"/>
-	
-<echo message="start"/>
+	<echo message="pulling in property files" />
+	<property file="build.properties" />
+
+	<echo message="start" />
 	<path id="lib.path.id">
-	<fileset dir="${lib.dir}"/>
+		<fileset dir="${lib.dir}" />
 	</path>
 	<path id="run.path.id">
-	<path refid="lib.path.id"></path>
-	<path location="${build.dir}"/>
+		<path refid="lib.path.id">
+		</path>
+		<path location="${build.dir}" />
 	</path>
-	<target name="resolve" description="检查库">
-		<ivy:retrieve/>
+	<!-- - - - - - - - - - - - - - - - - - 
+          target: clean                      
+         - - - - - - - - - - - - - - - - - -->
+    <target name="clean">
+       <delete dir="${build.dir}"></delete>
+    </target>
+	<target name="init" description="初始化目录">
+		<mkdir dir="${build.dir}" description="构建base目录"/>
+		<mkdir dir="${build.dir}/${test.report.dir}" description="测试报告"/>
 	</target>
- <target name="main" depends="resolve">
- </target>
-	<!--
- <junit id="test" description="单元测试" dir="src">
- </junit>
- -->
+	<target name="download-libs" description="检查库并下载缺少的库">
+		<ivy:info file="${ivy.file}" />
+		<ivy:retrieve />
+	</target>
+	<target name="main" depends="download-libs">
+	</target>
+	<target name="java-compile" description="JAVA代码编译">
+		<javac>
+		</javac>
+	</target>
+	<target name="test" description="测试">
+		<junit id="test" description="单元测试" dir="src">
+			<classpath>
+		      <path refid="lib.path.id"/>
+			</classpath>
+			<batchtest fork="yes" todir="${reports.tests}">
+		   <fileset dir="${src.test}">
+		   <include name="**/*Test.java"/>
+		   </fileset>
+		    </batchtest>
+		</junit>
+	</target>
+	<target name="jar">
+	</target>
 </project>
