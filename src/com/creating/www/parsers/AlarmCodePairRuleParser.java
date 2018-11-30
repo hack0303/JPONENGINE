@@ -2,7 +2,7 @@ package com.creating.www.parsers;
 
 import java.util.Map;
 
-import com.creating.www.beans.AlarmCode;
+import com.creating.www.beans.codes.AlarmCode;
 
 public class AlarmCodePairRuleParser implements Parser<String,Map<AlarmCode,AlarmCode>>{
 

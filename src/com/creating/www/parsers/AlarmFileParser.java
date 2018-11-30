@@ -1,7 +1,7 @@
 package com.creating.www.parsers;
 
-import com.creating.www.beans.AlarmModel;
-import com.creating.www.beans.AlmBean;
+import com.creating.www.AlarmModel;
+import com.creating.www.AlmBean;
 
 public class AlarmFileParser implements Parser<AlmBean,AlarmModel>{
 

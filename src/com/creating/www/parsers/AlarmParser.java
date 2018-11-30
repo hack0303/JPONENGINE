@@ -3,7 +3,7 @@ package com.creating.www.parsers;
 import java.io.File;
 import java.util.List;
 
-import com.creating.www.beans.AlmBean;
+import com.creating.www.AlmBean;
 
 public class AlarmParser implements Parser<File,List<AlmBean>>{
 

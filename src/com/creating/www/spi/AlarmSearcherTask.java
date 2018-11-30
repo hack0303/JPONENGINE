@@ -1,6 +1,6 @@
 package com.creating.www.spi;
 
-import com.creating.www.beans.AlarmModel;
+import com.creating.www.AlarmModel;
 
 public class AlarmSearcherTask implements Runnable{
 

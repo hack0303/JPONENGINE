@@ -44,4 +44,7 @@
         <prop key="spring.liveBeansView.mbeanDomain">dev</prop>  
     </util:properties>
     <bean id="appContext" class="com.creating.www.core.AppContext" p:ENVIRONMENT-ref="ENVIRONMENT_VARS"/>
+    <bean id="CodeRuleFactory" class="com.creating.www.beans.codes.support.CodeRuleFactory"/>
+    <bean id="LocationInfoFactory" class="com.creating.www.beans.elecs.support.LocationInfoFactory"/>
+    <bean id="CodeRulePairFactory" class="com.creating.www.beans.codes.support.CodeRulePairFactory"/>
 </beans>

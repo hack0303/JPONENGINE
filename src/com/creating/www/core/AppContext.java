@@ -6,7 +6,7 @@ import java.util.concurrent.DelayQueue;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-import com.creating.www.beans.AlarmModel;
+import com.creating.www.AlarmModel;
 
 public class AppContext {
 	/**

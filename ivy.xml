@@ -28,5 +28,6 @@
         <dependency org="org.springframework" name="spring-aop" rev="${spring.version}" conf="default"/>
         <dependency org="org.springframework" name="spring-aspects" rev="${spring.version}" conf="default"/>
         <dependency org="org.springframework" name="spring-context-support" rev="${spring.version}" conf="default"/>
+        <dependency org="mysql" name="mysql-connector-java" rev="8.0.11" conf="default"/>
     </dependencies>
 </ivy-module>
