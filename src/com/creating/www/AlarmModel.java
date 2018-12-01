@@ -20,12 +20,29 @@ static Logger logger=LogManager.getLogger(AlarmModel.class.getName());
 private static  long DELAY_TIME=Long.valueOf((String) APP.appContext.getProperty(com.creating.www.config.Environment.APP_DELAY_TIME,"20000"));
 private Integer id;
 private AlmBean almBean;
+@Override
+public String toString() {
+	return "AlarmModel [id=" + id + ", almBean=" + almBean + ", alarmCode=" + alarmCode + ", location=" + location
+			+ ", firstCreateTime=" + firstCreateTime + ", receiveTime=" + receiveTime + ", source=" + source
+			+ ", descend=" + descend + "]";
+}
 private AlarmCode alarmCode;
 private LocationInfo location;
 private Date firstCreateTime;
 private Date receiveTime;
 private AlarmModel source;
 private List<AlarmModel> descend;
+
+public AlarmModel(Integer id, AlmBean almBean, AlarmCode alarmCode, LocationInfo location, Date firstCreateTime,
+		Date receiveTime) {
+	super();
+	this.id = id;
+	this.almBean = almBean;
+	this.alarmCode = alarmCode;
+	this.location = location;
+	this.firstCreateTime = firstCreateTime;
+	this.receiveTime = receiveTime;
+}
 public Integer getId() {
 	return id;
 }

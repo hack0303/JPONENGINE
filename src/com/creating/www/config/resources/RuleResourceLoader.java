@@ -8,9 +8,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -24,7 +22,7 @@ import com.creating.www.RoleType;
 import com.creating.www.beans.IFactory;
 import com.creating.www.beans.codes.AlarmCode;
 import com.creating.www.beans.codes.AlarmCodePair;
-import com.creating.www.beans.codes.support.CodeRuleFactory;
+import com.creating.www.beans.codes.support.AlarmCodeFactory;
 import com.creating.www.beans.codes.support.CodeRulePairFactory;
 import com.creating.www.beans.elecs.ElecUnit;
 import com.creating.www.beans.elecs.LocationInfo;
@@ -42,7 +40,7 @@ public class RuleResourceLoader implements Generator<Map<AlarmCode, Map<RoleType
 	static String regex001=",";
 	Resource resource=new FileSystemResource("config/rules/rule.csv");
 	@SuppressWarnings("unchecked")
-	private IFactory<Object[],AlarmCode> _ALARMCODE_FACTORY=(IFactory<Object[],AlarmCode>) APP.atx.getBean(CodeRuleFactory.class.getSimpleName());
+	private IFactory<Object[],AlarmCode> _ALARMCODE_FACTORY=(IFactory<Object[],AlarmCode>) APP.atx.getBean(AlarmCodeFactory.class.getSimpleName());
 	@SuppressWarnings("unchecked")
 	private IFactory<Object[],AlarmCodePair> _CODERULE_PAIR_FACTORY=(IFactory<Object[], AlarmCodePair>) APP.atx.getBean(CodeRulePairFactory.class.getSimpleName());
 	@SuppressWarnings("unchecked")
