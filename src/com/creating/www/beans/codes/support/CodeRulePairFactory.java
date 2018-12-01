@@ -3,12 +3,9 @@
  */
 package com.creating.www.beans.codes.support;
 
-import com.creating.www.APP;
 import com.creating.www.beans.IFactory;
 import com.creating.www.beans.codes.AlarmCode;
 import com.creating.www.beans.codes.AlarmCodePair;
-import com.creating.www.beans.elecs.LocationInfo;
-import com.creating.www.beans.elecs.support.LocationInfoFactory;
 
 /**
  * @author Chack Yao

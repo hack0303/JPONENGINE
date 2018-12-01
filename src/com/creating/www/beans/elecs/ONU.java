@@ -25,4 +25,22 @@ public class ONU extends ElecUnit{
 		return null;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.creating.www.beans.elecs.LayerDescriptionInfo#fatherElecTypes()
+	 */
+	@Override
+	public ElecType[] fatherElecTypes() {
+		// TODO Auto-generated method stub
+		return new ElecType[]{ElecType.NET,ElecType.BOARD,ElecType.PONINTERFACE};
+	}
+
+	/* (non-Javadoc)
+	 * @see com.creating.www.beans.elecs.LayerDescriptionInfo#childElecTypes()
+	 */
+	@Override
+	public ElecType[] childElecTypes() {
+		// TODO Auto-generated method stub
+		return new ElecType[]{ElecType.OTHER};
+	}
+
 }

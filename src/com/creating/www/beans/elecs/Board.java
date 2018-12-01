@@ -24,4 +24,20 @@ public class Board extends ElecUnit{
 		return null;
 	}
 
+	/* (non-Javadoc)
+	 * @see com.creating.www.beans.elecs.LayerDescriptionInfo#fatherElecTypes()
+	 */
+	@Override
+	public ElecType[] fatherElecTypes() {
+		return new ElecType[]{ElecType.NET};
+	}
+
+	/* (non-Javadoc)
+	 * @see com.creating.www.beans.elecs.LayerDescriptionInfo#childElecTypes()
+	 */
+	@Override
+	public ElecType[] childElecTypes() {
+		return new ElecType[]{ElecType.PONINTERFACE,ElecType.ONU,ElecType.OTHER};
+	}
+
 }
