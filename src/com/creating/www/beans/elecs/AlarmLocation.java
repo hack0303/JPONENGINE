@@ -1,7 +1,5 @@
 package com.creating.www.beans.elecs;
 
-import static org.hamcrest.CoreMatchers.instanceOf;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -9,6 +7,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 
 /**
@@ -47,7 +46,7 @@ public class AlarmLocation implements Comparable<AlarmLocation>,LayerDescription
 	 * @param dest
 	 */
 	public AlarmLocation(List<ElecUnit> dest) {
-		// TODO Auto-generated constructor stub
+		this.locationInfo=dest;
 	}
 
 	public boolean isFather4Other(AlarmLocation location) 
@@ -92,6 +91,7 @@ public class AlarmLocation implements Comparable<AlarmLocation>,LayerDescription
 		}else 
 		{
 			ElecUnit local=locationInfo.get(locationInfo.size()-1);
+			if(local==null) System.out.println("delete xxxxxxxxxxxxxxxxxxxxxxxx");
 			originElecUnit=local;
 			return local;
 		}
@@ -118,29 +118,33 @@ public class AlarmLocation implements Comparable<AlarmLocation>,LayerDescription
 		{
 			ElecUnit key=this.locationInfo.get(i);
 			Set<ElecUnit> value=elecStructure.get(key);
-			if(value==null) { value=new HashSet<ElecUnit>();
+			if(value==null) { value=new CopyOnWriteArraySet<ElecUnit>();
 			elecStructure.put(key, value);
 			}
+			//if(this.locationInfo.get(i+1)==null) System.out.println("---------------");
 			value.add(this.locationInfo.get(i+1));
+			
 		}
 	}
 	public AlarmLocation up() 
 	{
 		if(this.locationInfo.size()==1) return null;
-		List<ElecUnit> dest=new ArrayList<>();
-		Collections.copy(dest,this.locationInfo);
-		dest.remove(dest.size()-1);
+		ElecUnit[] origin=(ElecUnit[]) this.locationInfo.toArray();
+		int length=origin.length-1;
+		ElecUnit[] dest_array=new ElecUnit[length];
+		System.arraycopy(origin, 0, dest_array, 0, length);
+		List<ElecUnit> dest=Arrays.asList(dest_array);
 		return new AlarmLocation(dest);
 	} 
 	public Set<AlarmLocation> upAll()
 	{
 		if(this.getLastestElecUnit().type.toIndex()==NET_LAYER_INDEX) return null;
 		Set<AlarmLocation> alarmLocations=new HashSet<AlarmLocation>();
-		AlarmLocation al=null;
-		while((al=up())!=null) 
-		{
-			 alarmLocations.add(al);
-		}
+		AlarmLocation al=this;
+		do{
+			al=al.up();
+			if(al!=null) alarmLocations.add(al);
+		}while(al!=null);
 		if(alarmLocations.size()==0) return null;
 		return alarmLocations;
 	}
@@ -165,15 +169,31 @@ public class AlarmLocation implements Comparable<AlarmLocation>,LayerDescription
 		if(elecStructure==null) return null;
 		Set<AlarmLocation> outterAlarmLocations=new HashSet<AlarmLocation>();//外层存储集合or最终结果集合
 		ElecUnit origin_ElecUnit=getLastestElecUnit();
-		int current=origin_ElecUnit.type.toIndex();
+		int current=0;
+		try{current=origin_ElecUnit.type.toIndex();
+		}catch(Exception e) 
+		{
+		  // System.out.println(origin_ElecUnit+":"+this.locationInfo);
+		}
+		
 		if(current>=ONU_LAYER_Index) return null;
 				Set<ElecUnit> nextLayerUnits=elecStructure.get(origin_ElecUnit);
 			if(nextLayerUnits!=null) 
 			{
-				for(ElecUnit eu:nextLayerUnits) 
+				Object[] _nextLayerUnits=nextLayerUnits.toArray();
+				//if(nextLayerUnits.contains(null)) System.out.println("contains null");
+				//ElecUnit[] elecUnits=new ElecUnit[nextLayerUnits.size()];
+				//nextLayerUnits.toArray(elecUnits);
+                for(Object obj:_nextLayerUnits) 
 				{
-					List<ElecUnit> dest=new ArrayList<ElecUnit>();
-					Collections.copy(dest,this.locationInfo);
+                	ElecUnit eu=(ElecUnit) obj;
+                	System.out.println(eu);
+					if(eu==null) { System.out.println(this+":"+"----------"+nextLayerUnits+"-------------");}
+					ElecUnit[] src=new ElecUnit[this.locationInfo.size()];
+					this.locationInfo.toArray(src);
+					ElecUnit[] _dest=new ElecUnit[src.length];
+					System.arraycopy(src, 0, _dest, 0, src.length);
+					List<ElecUnit> dest=new ArrayList<>(Arrays.asList(_dest));
 					dest.add(eu);
 					AlarmLocation aAlarmLocation=new AlarmLocation(dest);
 					outterAlarmLocations.add(aAlarmLocation);

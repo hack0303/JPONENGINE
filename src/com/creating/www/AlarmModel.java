@@ -102,6 +102,7 @@ public boolean storeAlarmToCache(Map<AlarmLocation,List<AlarmModel>> alarmMappin
 {
 	if(alarmMapping==null) return false;
 	List<AlarmModel> list=alarmMapping.get(this.getLocation());
+	if(list==null) return false;
 	return list.remove(this);
 }
 }

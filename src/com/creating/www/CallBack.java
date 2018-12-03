@@ -8,6 +8,7 @@ import org.apache.logging.log4j.Logger;
 import com.creating.www.impl.CallBackImpl;
 import com.creating.www.parsers.AlarmModelFromAlmBeanParser;
 import com.creating.www.parsers.Parser;
+import com.creating.www.spi.AlarmSearcherTask;
 
 public class CallBack extends CallBackImpl {
     /**
@@ -26,6 +27,7 @@ public class CallBack extends CallBackImpl {
 		arg0.forEach((e)->{
 			//logger.debug("[{}] [{}]","PON-ALARM",((PONAlarm)e).getId());
 			AlarmModel am=parser.parse(e);
+			APP.appContext.getThreadPool().execute(new AlarmSearcherTask(am));
 			//logger.debug("[{}] [{}]","PON-MODEL",am);
 		});
 	}

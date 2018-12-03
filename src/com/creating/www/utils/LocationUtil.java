@@ -60,6 +60,8 @@ public static ElecUnit[] parse(String str)
 		board=ElecUnitParser.newBoard(devInfo, layerLocationNumber);
 		devInfo=strs[2];
 		pon=ElecUnitParser.newPONInterface(devInfo, layerLocationNumber);
+	//	if(pon==null)
+	//		System.out.println("------------------------------------");
 		objs= new ElecUnit[]{net,board,pon};
 		break;	
 	}
@@ -85,7 +87,6 @@ public static ElecUnit[] parse(String str)
 		pon=ElecUnitParser.newPONInterface(devInfo, layerLocationNumber);
 		devInfo=strs[3];
 		onu=ElecUnitParser.newONU(devInfo, layerLocationNumber);
-		objs= new ElecUnit[]{net,board,pon,onu};
 		devInfo=strs[4];
 		other=ElecUnitParser.newOtherUnit(devInfo, layerLocationNumber);
 		objs= new ElecUnit[]{net,board,pon,onu,other};

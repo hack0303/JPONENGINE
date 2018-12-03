@@ -35,16 +35,18 @@
        <value>UTF-8</value>
        </property>
     </bean>
-    <bean id="app-context" class="com.creating.www.core.AppContext">
+    <bean id="app-context" class="com.creating.www.core.AppContext" p:sys_mode="${com.gs.nms.app.mode}">
     </bean>
     <util:properties id="ENVIRONMENT_VARS">
     	<prop key="app-name">JPON 告警分析过滤引擎</prop>
         <prop key="app-version">V1.1</prop>
         <prop key="company-name">国响信息科技有限公司</prop>
-        <prop key="spring.liveBeansView.mbeanDomain">dev</prop>  
+        <prop key="spring.liveBeansView.mbeanDomain">dev</prop>
+        <prop key="com.gs.nms.test.almbean.filepath">${com.gs.nms.test.almbean.filepath}</prop>  
     </util:properties>
     <bean id="appContext" class="com.creating.www.core.AppContext" p:ENVIRONMENT-ref="ENVIRONMENT_VARS"/>
     <bean id="AlarmCodeFactory" class="com.creating.www.beans.codes.support.AlarmCodeFactory"/>
     <bean id="LocationInfoFactory" class="com.creating.www.beans.elecs.support.LocationInfoFactory"/>
     <bean id="CodeRulePairFactory" class="com.creating.www.beans.codes.support.CodeRulePairFactory"/>
+    <bean id="AlmBeanHelper" class="com.creating.www.beans.support.AlmBeanHelper"/>
 </beans>

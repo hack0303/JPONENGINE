@@ -10,6 +10,9 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import com.creating.www.AlarmModel;
 import com.creating.www.RoleType;
 import com.creating.www.beans.codes.AlarmCode;
@@ -25,6 +28,7 @@ import com.creating.www.impl.PONAlarm;
  *
  */
 public class CacheRelaUtil {
+	static Logger logger=LogManager.getLogger(CacheRelaUtil.class.getName());
 	public static AlarmModel findSource(Map<AlarmLocation, List<AlarmModel>> alarmMapping,
 			Map<ElecUnit, Set<ElecUnit>> elecStructure, Map<AlarmCode, Map<RoleType, Set<AlarmCode>>> matchingRule,
 			AlarmModel alarm) {
@@ -32,6 +36,7 @@ public class CacheRelaUtil {
 		AlarmLocation al = alarm.getLocation();
 		AlarmModel target = null;
 		Set<AlarmLocation> al_collection = allPossibleAlarmLocations(elecStructure, al, true);
+	    logger.debug(al_collection);
 		for (AlarmLocation a : al_collection) {
 			CopyOnWriteArrayList<AlarmModel> possibleAlarms = ((CopyOnWriteArrayList<AlarmModel>) alarmMapping.get(a));
 			if (possibleAlarms == null)
@@ -43,7 +48,7 @@ public class CacheRelaUtil {
 			for (AlarmModel am : _possibleAlarms) {
 				AlarmCode sourceAC = am.getAlarmCode();
 				if (checkAlarmCodePair(matchingRule, sourceAC, ac)) {
-					if (alarm.compareFirstCreateTimeTo(am, 20 * 1000))
+				//	if (alarm.compareFirstCreateTimeTo(am, 20 * 1000))
 						return am;
 				}
 			}
@@ -80,18 +85,18 @@ public class CacheRelaUtil {
 			if (rootNode != null) {
 				alarmLocations = _self_location.upAll();
 			}
-			if (alarmLocations != null) {
+			if (alarmLocations == null) {
 				alarmLocations = new HashSet<>();
-				alarmLocations.add(_self_location);
 			}
+			alarmLocations.add(_self_location);
 		} else {
 			if (rootNode != null) {
 				alarmLocations = _self_location.downAll(elecStructure);
 			}
-			if (alarmLocations != null) {
+			if (alarmLocations == null) {
 				alarmLocations = new HashSet<>();
-				alarmLocations.add(_self_location);
 			}
+			alarmLocations.add(_self_location);
 		}
 		return alarmLocations;
 	}
@@ -119,10 +124,10 @@ public class CacheRelaUtil {
 			for (AlarmModel am : _possibleAlarms) {
 				AlarmCode sourceAC = am.getAlarmCode();
 				if (checkAlarmCodePair(matchingRule, sourceAC, ac)) {
-					if (alarm.compareFirstCreateTimeTo(am, 20 * 1000)) {
+					//if (alarm.compareFirstCreateTimeTo(am, 20 * 1000)) {
 						removeAlarmInCache(alarmMapping,am);
 						target.add(am);
-					}
+					//}
 				}
 			}
 		}
