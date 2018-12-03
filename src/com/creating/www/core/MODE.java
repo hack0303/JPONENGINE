@@ -1,5 +1,9 @@
 package com.creating.www.core;
 
+/**
+ * @author Chack Yao
+ * @firstcreatetime 2018年12月3日 下午3:54:09
+ * */
 public enum MODE {
     DEV(1,"开发者模式"),PRODUCTION(2,"生产环境");
 	private int _MODE_ID=0;

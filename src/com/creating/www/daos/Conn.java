@@ -4,6 +4,10 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+/**
+ * @author Chack Yao
+ * @firstcreatetime 2018年12月3日 下午3:54:22
+ * */
 public class Conn {
 
 	public static Connection getConnection() throws InstantiationException, IllegalAccessException, ClassNotFoundException, SQLException 

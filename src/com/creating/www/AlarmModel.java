@@ -2,6 +2,7 @@ package com.creating.www;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Delayed;
 import java.util.concurrent.TimeUnit;
 
@@ -9,13 +10,13 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.creating.www.beans.codes.AlarmCode;
-import com.creating.www.beans.elecs.LocationInfo;
+import com.creating.www.beans.elecs.AlarmLocation;
 
 /**
  * @author Chack Yao
  * @firstcreatetime 2018年11月29日 下午2:08:45
  * */
-public class AlarmModel implements Delayed{
+public class AlarmModel implements Delayed,FirstCreateTimeCompareable<AlarmModel,Integer>{
 static Logger logger=LogManager.getLogger(AlarmModel.class.getName());
 private static  long DELAY_TIME=Long.valueOf((String) APP.appContext.getProperty(com.creating.www.config.Environment.APP_DELAY_TIME,"20000"));
 private Integer id;
@@ -27,13 +28,13 @@ public String toString() {
 			+ ", descend=" + descend + "]";
 }
 private AlarmCode alarmCode;
-private LocationInfo location;
+private AlarmLocation location;
 private Date firstCreateTime;
 private Date receiveTime;
 private AlarmModel source;
 private List<AlarmModel> descend;
 
-public AlarmModel(Integer id, AlmBean almBean, AlarmCode alarmCode, LocationInfo location, Date firstCreateTime,
+public AlarmModel(Integer id, AlmBean almBean, AlarmCode alarmCode, AlarmLocation location, Date firstCreateTime,
 		Date receiveTime) {
 	super();
 	this.id = id;
@@ -61,10 +62,10 @@ public AlarmCode getAlarmCode() {
 public void setAlarmCode(AlarmCode alarmCode) {
 	this.alarmCode = alarmCode;
 }
-public LocationInfo getLocation() {
+public AlarmLocation getLocation() {
 	return location;
 }
-public void setLocation(LocationInfo location) {
+public void setLocation(AlarmLocation location) {
 	this.location = location;
 }
 public Date getFirstCreateTime() {
@@ -73,6 +74,7 @@ public Date getFirstCreateTime() {
 public void setFirstCreateTime(Date firstCreateTime) {
 	this.firstCreateTime = firstCreateTime;
 }
+
 @Override
 public int compareTo(Delayed o) {
 	if(!(o instanceof AlarmModel)) 
@@ -86,5 +88,20 @@ public int compareTo(Delayed o) {
 @Override
 public long getDelay(TimeUnit unit) {
 	return unit.convert(receiveTime.getTime()+DELAY_TIME-System.currentTimeMillis(),TimeUnit.MILLISECONDS);
+}
+
+/* (non-Javadoc)
+ * @see com.creating.www.FirstCreateTimeCompareable#compareFirstCreateTimeTo(java.lang.Object, java.lang.Object)
+ */
+@Override
+public boolean compareFirstCreateTimeTo(AlarmModel target, Integer time) {
+	
+	return Math.abs(this.firstCreateTime.getTime()-target.firstCreateTime.getTime())<=time.intValue();
+}
+public boolean storeAlarmToCache(Map<AlarmLocation,List<AlarmModel>> alarmMapping) 
+{
+	if(alarmMapping==null) return false;
+	List<AlarmModel> list=alarmMapping.get(this.getLocation());
+	return list.remove(this);
 }
 }

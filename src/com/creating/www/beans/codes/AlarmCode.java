@@ -1,11 +1,11 @@
 package com.creating.www.beans.codes;
 
-import com.creating.www.beans.elecs.LocationInfo;
+import com.creating.www.beans.elecs.AlarmLocation;
 
 public class AlarmCode {
 private Integer code;//告警码
-private LocationInfo location;//告警定位信息
-public AlarmCode(Integer code, LocationInfo location) {
+private AlarmLocation location;//告警定位信息
+public AlarmCode(Integer code, AlarmLocation location) {
 	super();
 	this.code = code;
 	this.location = location;
@@ -16,10 +16,10 @@ public Integer getCode() {
 public void setCode(Integer code) {
 	this.code = code;
 }
-public LocationInfo getLocation() {
+public AlarmLocation getLocation() {
 	return location;
 }
-public void setLocation(LocationInfo location) {
+public void setLocation(AlarmLocation location) {
 	this.location = location;
 }
 @Override

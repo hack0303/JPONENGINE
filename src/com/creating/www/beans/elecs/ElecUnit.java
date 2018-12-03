@@ -34,5 +34,37 @@ public abstract class ElecUnit implements Comparable<ElecUnit>,LayerDescriptionI
 		}
 		return this.devInfo.compareTo(o.devInfo);
 	}
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((devInfo == null) ? 0 : devInfo.hashCode());
+		result = prime * result + ((layerLocationNumber == null) ? 0 : layerLocationNumber.hashCode());
+		result = prime * result + ((type == null) ? 0 : type.hashCode());
+		return result;
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ElecUnit other = (ElecUnit) obj;
+		if (devInfo == null) {
+			if (other.devInfo != null)
+				return false;
+		} else if (!devInfo.equals(other.devInfo))
+			return false;
+		if (layerLocationNumber == null) {
+			if (other.layerLocationNumber != null)
+				return false;
+		} else if (!layerLocationNumber.equals(other.layerLocationNumber))
+			return false;
+		if (type != other.type)
+			return false;
+		return true;
+	}
 	
 }

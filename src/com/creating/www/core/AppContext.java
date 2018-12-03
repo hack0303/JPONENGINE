@@ -8,6 +8,11 @@ import java.util.concurrent.Executors;
 
 import com.creating.www.AlarmModel;
 
+
+/**
+ * @author Chack Yao
+ * @firstcreatetime 2018年12月3日 下午3:53:57
+ * */
 public class AppContext {
 	/**
 	 * APP环境参数

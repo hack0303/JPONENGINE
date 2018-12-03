@@ -7,7 +7,7 @@ import java.util.Date;
 import com.creating.www.AlarmModel;
 import com.creating.www.AlmBean;
 import com.creating.www.beans.codes.AlarmCode;
-import com.creating.www.beans.elecs.LocationInfo;
+import com.creating.www.beans.elecs.AlarmLocation;
 import com.creating.www.impl.PONAlarm;
 import com.creating.www.utils.LocationUtil;
 
@@ -26,7 +26,7 @@ public class AlarmModelFromAlmBeanParser implements Parser<AlmBean,AlarmModel> {
 		PONAlarm p_alm=(PONAlarm)almBean;
 		Integer id=p_alm.getId();
 		Date firstCreateTime=p_alm.getFirstCreateTime();
-		LocationInfo location=new LocationInfo(LocationUtil.parse(p_alm.getLocation()));
+		AlarmLocation location=new AlarmLocation(LocationUtil.parse(p_alm.getLocation()));
 		AlarmCode alarmCode=new AlarmCode(p_alm.getCode(), location);
 		Date receiveTime=new Date();
 		AlarmModel am=new AlarmModel(id, almBean, alarmCode, location, firstCreateTime, receiveTime);

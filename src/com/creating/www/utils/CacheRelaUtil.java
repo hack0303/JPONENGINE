@@ -3,6 +3,7 @@
  */
 package com.creating.www.utils;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -14,7 +15,7 @@ import com.creating.www.RoleType;
 import com.creating.www.beans.codes.AlarmCode;
 import com.creating.www.beans.elecs.ElecType;
 import com.creating.www.beans.elecs.ElecUnit;
-import com.creating.www.beans.elecs.LocationInfo;
+import com.creating.www.beans.elecs.AlarmLocation;
 import com.creating.www.core.Cache;
 import com.creating.www.impl.PONAlarm;
 
@@ -24,42 +25,116 @@ import com.creating.www.impl.PONAlarm;
  *
  */
 public class CacheRelaUtil {
-public static AlarmModel findSource(Map<AlarmCode,Map<ElecType,Map<LocationInfo, List<AlarmModel>>>> mapping,AlarmModel alarm){
-	AlarmCode ac=alarm.getAlarmCode();
-	AlarmModel target=null;
-	Set<AlarmCode> codes=getMappingCodes(Cache._CODE_RULE,ac,RoleType.SOURCE);
-	if(codes==null||codes.size()==0) return null;
-	Map<ElecType,Map<LocationInfo, List<AlarmModel>>> _mapping=mapping.get(ac);
-	if(_mapping==null) return null;
-	LocationInfo location=alarm.getLocation();
-	ElecType[] ets=location.fatherElecTypes();
-	Map<LocationInfo,List<AlarmModel>> __mapping=null;
-	for(ElecType et:ets) {
-	__mapping=_mapping.get(et);
-	List<AlarmModel> list=__mapping.get(ac.getLocation());
-	if(list==null) return null;
-	@SuppressWarnings("unchecked")
-	List<AlarmModel> _list=(List<AlarmModel>) ((CopyOnWriteArrayList<AlarmModel>)list).clone();
-	for(AlarmModel e:_list) 
-	{
-		if(Math.abs(e.getFirstCreateTime().getTime()-alarm.getFirstCreateTime().getTime())<=20*1000) 
-		{
-			target=e;
-		    break;
+	public static AlarmModel findSource(Map<AlarmLocation, List<AlarmModel>> alarmMapping,
+			Map<ElecUnit, Set<ElecUnit>> elecStructure, Map<AlarmCode, Map<RoleType, Set<AlarmCode>>> matchingRule,
+			AlarmModel alarm) {
+		AlarmCode ac = alarm.getAlarmCode();
+		AlarmLocation al = alarm.getLocation();
+		AlarmModel target = null;
+		Set<AlarmLocation> al_collection = allPossibleAlarmLocations(elecStructure, al, true);
+		for (AlarmLocation a : al_collection) {
+			CopyOnWriteArrayList<AlarmModel> possibleAlarms = ((CopyOnWriteArrayList<AlarmModel>) alarmMapping.get(a));
+			if (possibleAlarms == null)
+				continue;
+			@SuppressWarnings("unchecked")
+			List<AlarmModel> _possibleAlarms = (List<AlarmModel>) possibleAlarms.clone();
+			if (_possibleAlarms.size() == 0)
+				continue;
+			for (AlarmModel am : _possibleAlarms) {
+				AlarmCode sourceAC = am.getAlarmCode();
+				if (checkAlarmCodePair(matchingRule, sourceAC, ac)) {
+					if (alarm.compareFirstCreateTimeTo(am, 20 * 1000))
+						return am;
+				}
+			}
 		}
-	}}
-	return target;
-}
-public static List<AlarmModel> findDescend(Map<AlarmCode,Map<ElecUnit,Map<LocationInfo, List<AlarmModel>>>> mapping,AlarmModel alarm){
-	
-	
-	return null;
-}
-public static Set<AlarmCode> getMappingCodes(Map<AlarmCode, Map<RoleType,Set<AlarmCode>>> code_mapping,AlarmCode key,RoleType type)
-{
-	Map<RoleType,Set<AlarmCode>> _code_mapping=code_mapping.get(key);
-	if(_code_mapping==null) return null;
-	Set<AlarmCode> codes=_code_mapping.get(type);
-	return codes;
-}
+		return target;
+	}
+
+	public static boolean checkAlarmCodePair(Map<AlarmCode, Map<RoleType, Set<AlarmCode>>> codeRule, AlarmCode src,
+			AlarmCode dsc) {
+		if (codeRule == null)
+			return false;
+		Map<RoleType, Set<AlarmCode>> roleType2AlarmCodes = codeRule.get(src);
+		if (roleType2AlarmCodes == null)
+			return false;
+		Set<AlarmCode> dscACs = roleType2AlarmCodes.get(RoleType.DESCEND);
+		if (dscACs == null)
+			return false;
+		if (dscACs.contains(dsc))
+			return true;
+		return false;
+	}
+
+	/**
+	 * 
+	 * @param 1电路结构
+	 *            2自身告警定位 3是否上溯
+	 * @return 所有可能的定位 null 表示没有
+	 */
+	public static Set<AlarmLocation> allPossibleAlarmLocations(Map<ElecUnit, Set<ElecUnit>> elecStructure,
+			AlarmLocation _self_location, boolean anscend) {
+		Set<AlarmLocation> alarmLocations = null;
+		ElecUnit rootNode = _self_location.getRootNode();
+		if (anscend) {
+			if (rootNode != null) {
+				alarmLocations = _self_location.upAll();
+			}
+			if (alarmLocations != null) {
+				alarmLocations = new HashSet<>();
+				alarmLocations.add(_self_location);
+			}
+		} else {
+			if (rootNode != null) {
+				alarmLocations = _self_location.downAll(elecStructure);
+			}
+			if (alarmLocations != null) {
+				alarmLocations = new HashSet<>();
+				alarmLocations.add(_self_location);
+			}
+		}
+		return alarmLocations;
+	}
+    public static boolean removeAlarmInCache(Map<AlarmLocation,List<AlarmModel>> alarmMapping,AlarmModel am) 
+    {
+    	if(alarmMapping==null||alarmMapping.size()==0) return false;
+    	List<AlarmModel> list=alarmMapping.get(am.getLocation());
+    	return list.remove(am);
+    }
+	public static Set<AlarmModel> findDescend(Map<AlarmLocation, List<AlarmModel>> alarmMapping,
+			Map<ElecUnit, Set<ElecUnit>> elecStructure, Map<AlarmCode, Map<RoleType, Set<AlarmCode>>> matchingRule,
+			AlarmModel alarm) {
+		Set<AlarmModel> target=new HashSet<AlarmModel>();
+		AlarmCode ac = alarm.getAlarmCode();
+		AlarmLocation al = alarm.getLocation();
+		Set<AlarmLocation> al_collection = allPossibleAlarmLocations(elecStructure, al, false);
+		for (AlarmLocation a : al_collection) {
+			CopyOnWriteArrayList<AlarmModel> possibleAlarms = ((CopyOnWriteArrayList<AlarmModel>) alarmMapping.get(a));
+			if (possibleAlarms == null)
+				continue;
+			@SuppressWarnings("unchecked")
+			List<AlarmModel> _possibleAlarms = (List<AlarmModel>) possibleAlarms.clone();
+			if (_possibleAlarms.size() == 0)
+				continue;
+			for (AlarmModel am : _possibleAlarms) {
+				AlarmCode sourceAC = am.getAlarmCode();
+				if (checkAlarmCodePair(matchingRule, sourceAC, ac)) {
+					if (alarm.compareFirstCreateTimeTo(am, 20 * 1000)) {
+						removeAlarmInCache(alarmMapping,am);
+						target.add(am);
+					}
+				}
+			}
+		}
+		return target;
+	}
+
+	public static Set<AlarmCode> getMappingCodes(Map<AlarmCode, Map<RoleType, Set<AlarmCode>>> code_mapping,
+			AlarmCode key, RoleType type) {
+		Map<RoleType, Set<AlarmCode>> _code_mapping = code_mapping.get(key);
+		if (_code_mapping == null)
+			return null;
+		Set<AlarmCode> codes = _code_mapping.get(type);
+		return codes;
+	}
 }

@@ -25,7 +25,7 @@ import com.creating.www.beans.codes.AlarmCodePair;
 import com.creating.www.beans.codes.support.AlarmCodeFactory;
 import com.creating.www.beans.codes.support.CodeRulePairFactory;
 import com.creating.www.beans.elecs.ElecUnit;
-import com.creating.www.beans.elecs.LocationInfo;
+import com.creating.www.beans.elecs.AlarmLocation;
 import com.creating.www.beans.elecs.support.LocationInfoFactory;
 import com.creating.www.core.Cache;
 import com.creating.www.utils.LocationUtil;
@@ -44,7 +44,7 @@ public class RuleResourceLoader implements Generator<Map<AlarmCode, Map<RoleType
 	@SuppressWarnings("unchecked")
 	private IFactory<Object[],AlarmCodePair> _CODERULE_PAIR_FACTORY=(IFactory<Object[], AlarmCodePair>) APP.atx.getBean(CodeRulePairFactory.class.getSimpleName());
 	@SuppressWarnings("unchecked")
-	private IFactory<ElecUnit[],LocationInfo> _LOCATION_FACTORY=(IFactory<ElecUnit[],LocationInfo>) APP.atx.getBean(LocationInfoFactory.class.getSimpleName());
+	private IFactory<ElecUnit[],AlarmLocation> _LOCATION_FACTORY=(IFactory<ElecUnit[],AlarmLocation>) APP.atx.getBean(LocationInfoFactory.class.getSimpleName());
 	public Map<AlarmCode,Map<RoleType,Set<AlarmCode>>> _CODE_RULE=new HashMap<AlarmCode,Map<RoleType,Set<AlarmCode>>>();
 	static Logger logger=LogManager.getLogger(RuleResourceLoader.class.getName());
 	/* (non-Javadoc)
