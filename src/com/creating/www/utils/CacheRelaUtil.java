@@ -7,7 +7,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeMap;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.apache.logging.log4j.LogManager;
@@ -16,11 +15,8 @@ import org.apache.logging.log4j.Logger;
 import com.creating.www.AlarmModel;
 import com.creating.www.RoleType;
 import com.creating.www.beans.codes.AlarmCode;
-import com.creating.www.beans.elecs.ElecType;
 import com.creating.www.beans.elecs.ElecUnit;
 import com.creating.www.beans.elecs.AlarmLocation;
-import com.creating.www.core.Cache;
-import com.creating.www.impl.PONAlarm;
 
 /**
  * @author Chack Yao
@@ -48,8 +44,11 @@ public class CacheRelaUtil {
 			for (AlarmModel am : _possibleAlarms) {
 				AlarmCode sourceAC = am.getAlarmCode();
 				if (checkAlarmCodePair(matchingRule, sourceAC, ac)) {
-				//	if (alarm.compareFirstCreateTimeTo(am, 20 * 1000))
+				//	if (alarm.compareFirstCreateTimeTo(am, 20 * 1000)){
+					if(alarm.setSource(am))
 						return am;
+					else continue;
+				//}
 				}
 			}
 		}
@@ -126,7 +125,8 @@ public class CacheRelaUtil {
 				if (checkAlarmCodePair(matchingRule, sourceAC, ac)) {
 					//if (alarm.compareFirstCreateTimeTo(am, 20 * 1000)) {
 						removeAlarmInCache(alarmMapping,am);
-						target.add(am);
+						if(alarm.addDescend(am))
+						  target.add(am);
 					//}
 				}
 			}

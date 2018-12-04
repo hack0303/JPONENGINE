@@ -2,9 +2,11 @@ package com.creating.www.core;
 
 import java.util.Properties;
 import java.util.Queue;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.DelayQueue;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
+import java.util.concurrent.LinkedBlockingQueue;
 
 import com.creating.www.AlarmModel;
 
@@ -39,12 +41,18 @@ public class AppContext {
 		return sys_mode;
 	}
 
-	private Queue<AlarmModel> timeDelayedQueue = new DelayQueue<AlarmModel>();
+	private BlockingQueue<AlarmModel> timeDelayedQueue = new DelayQueue<AlarmModel>();
 
-	public Queue<AlarmModel> _TIME_QUEUE() {
+	public BlockingQueue<AlarmModel> _TIME_QUEUE() {
 		return timeDelayedQueue;
 	}
-
+	/**
+	 * 告警结果队列
+	 * */
+    private BlockingQueue<AlarmModel> resultQueue=new LinkedBlockingQueue<>(50*10000);
+    public BlockingQueue<AlarmModel> _RESULT_QUEUE(){
+    	return resultQueue;
+    }
 	public Object getProperty(String key) {
 		if (ENVIRONMENT != null)
 			return ENVIRONMENT.getProperty(key);

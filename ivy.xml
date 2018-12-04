@@ -29,5 +29,9 @@
         <dependency org="org.springframework" name="spring-aspects" rev="${spring.version}" conf="default"/>
         <dependency org="org.springframework" name="spring-context-support" rev="${spring.version}" conf="default"/>
         <dependency org="mysql" name="mysql-connector-java" rev="8.0.11" conf="default"/>
+        <!-- https://mvnrepository.com/artifact/org.fusesource.jansi/jansi -->
+        <dependency org="org.fusesource.jansi" name="jansi" rev="1.17.1" conf="default"/>
+
+        
     </dependencies>
 </ivy-module>

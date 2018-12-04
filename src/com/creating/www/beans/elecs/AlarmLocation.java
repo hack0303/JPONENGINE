@@ -91,7 +91,7 @@ public class AlarmLocation implements Comparable<AlarmLocation>,LayerDescription
 		}else 
 		{
 			ElecUnit local=locationInfo.get(locationInfo.size()-1);
-			if(local==null) System.out.println("delete xxxxxxxxxxxxxxxxxxxxxxxx");
+		//	if(local==null) System.out.println("delete xxxxxxxxxxxxxxxxxxxxxxxx");
 			originElecUnit=local;
 			return local;
 		}
@@ -169,13 +169,7 @@ public class AlarmLocation implements Comparable<AlarmLocation>,LayerDescription
 		if(elecStructure==null) return null;
 		Set<AlarmLocation> outterAlarmLocations=new HashSet<AlarmLocation>();//外层存储集合or最终结果集合
 		ElecUnit origin_ElecUnit=getLastestElecUnit();
-		int current=0;
-		try{current=origin_ElecUnit.type.toIndex();
-		}catch(Exception e) 
-		{
-		  // System.out.println(origin_ElecUnit+":"+this.locationInfo);
-		}
-		
+		int current=origin_ElecUnit.type.toIndex();
 		if(current>=ONU_LAYER_Index) return null;
 				Set<ElecUnit> nextLayerUnits=elecStructure.get(origin_ElecUnit);
 			if(nextLayerUnits!=null) 
@@ -187,8 +181,8 @@ public class AlarmLocation implements Comparable<AlarmLocation>,LayerDescription
                 for(Object obj:_nextLayerUnits) 
 				{
                 	ElecUnit eu=(ElecUnit) obj;
-                	System.out.println(eu);
-					if(eu==null) { System.out.println(this+":"+"----------"+nextLayerUnits+"-------------");}
+                	//System.out.println(eu);
+					//if(eu==null) { System.out.println(this+":"+"----------"+nextLayerUnits+"-------------");}
 					ElecUnit[] src=new ElecUnit[this.locationInfo.size()];
 					this.locationInfo.toArray(src);
 					ElecUnit[] _dest=new ElecUnit[src.length];

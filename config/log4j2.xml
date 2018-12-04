@@ -5,18 +5,20 @@
 </Properties>
   <Appenders>
     <Console name="Console" target="SYSTEM_OUT">
-      <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+      <PatternLayout pattern="%d{ABSOLUTE_NANOS} %nano [%t] [%marker{1}] [%-5level] [%class{-3}] - %msg%n"/>
     </Console>
      <File name="fileAppender" fileName="${file001}" bufferedIO="false" advertiseURI="file://logs/output.log" advertise="true">
-      <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+      <PatternLayout pattern="%d{ABSOLUTE_NANOS} [%t] [%marker{1}] [%-5level] [%class{-3}] - %msg%n"/>
      </File>
   </Appenders>
   <Loggers>
     <Root level="debug">
       <AppenderRef ref="Console"/>
-    </Root>
+    </Root>  
+    <!-- 
     <Logger level="error" name="com.creating.www">
     <AppenderRef ref="fileAppender"/>
     </Logger>
+     -->
   </Loggers>
 </Configuration>

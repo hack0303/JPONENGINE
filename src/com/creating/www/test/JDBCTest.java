@@ -16,7 +16,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.creating.www.daos.Conn;
-import com.mysql.cj.jdbc.JdbcConnection;
 
 public class JDBCTest {
     static Logger logger=null;

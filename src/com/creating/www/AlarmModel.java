@@ -1,5 +1,6 @@
 package com.creating.www;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -25,15 +26,20 @@ private AlmBean almBean;
 public String toString() {
 	return "AlarmModel [id=" + id + ", almBean=" + almBean + ", alarmCode=" + alarmCode + ", location=" + location
 			+ ", firstCreateTime=" + firstCreateTime + ", receiveTime=" + receiveTime + ", source=" + source
-			+ ", descend=" + descend + "]";
+			+ ", descends=" + descends + "]";
 }
 private AlarmCode alarmCode;
 private AlarmLocation location;
 private Date firstCreateTime;
 private Date receiveTime;
-private AlarmModel source;
-private List<AlarmModel> descend;
+private AlarmModel source;//根
+private List<AlarmModel> descends;//衍生
 
+private volatile boolean dead=false;//是否要离开
+public synchronized boolean toDead() 
+{
+return this.dead=true;
+}
 public AlarmModel(Integer id, AlmBean almBean, AlarmCode alarmCode, AlarmLocation location, Date firstCreateTime,
 		Date receiveTime) {
 	super();
@@ -104,5 +110,78 @@ public boolean storeAlarmToCache(Map<AlarmLocation,List<AlarmModel>> alarmMappin
 	List<AlarmModel> list=alarmMapping.get(this.getLocation());
 	if(list==null) return false;
 	return list.remove(this);
+}
+public synchronized boolean setSource(AlarmModel source)
+{
+	if(this.source==null&&!source.dead) { 
+	this.source=source;
+	return true;	
+	}
+	return false;
+}
+public volatile boolean isRetention=false;
+public synchronized boolean addDescend(AlarmModel descend) 
+{
+	if(this.dead) 
+	{ 
+	 isRetention=true;
+	 APP.appContext._RESULT_QUEUE().add(descend);
+	 return false;
+	}
+	if(descends==null) 
+	{
+		this.descends=new ArrayList<AlarmModel>();
+	}
+	return this.descends.add(descend);
+}
+volatile boolean isHeader=false;
+public boolean isHeader() 
+{
+return this.isHeader;
+}
+/**
+ * 判断是否为组头
+ */
+public synchronized boolean see() {
+	if(this.source==null) 
+	{
+		this.isHeader=true;
+		return true;
+	}
+	return false;
+}
+public boolean removeAlarmInCache(Map<AlarmLocation,List<AlarmModel>> alarmMapping) 
+{
+	if(alarmMapping==null||alarmMapping.size()==0) return false;
+	List<AlarmModel> list=alarmMapping.get(this.getLocation());
+	return list.remove(this);
+}
+/**
+ * @return
+ */
+public AlarmModel getSource() {
+	// TODO Auto-generated method stub
+	return this.source;
+}
+/**
+ * @return
+ * @throws Exception 
+ */
+public List<Integer> assembly() throws Exception {
+	List<Integer> result=new ArrayList<Integer>();
+	result.add(this.getId());
+	return assembly(result);
+}
+public synchronized List<Integer> assembly(List<Integer> result) throws Exception {
+	if(this.dead) throw new Exception("子节点被多引用");
+	if(this.descends!=null&&this.descends.size()>0) 
+	{
+		for(AlarmModel am:this.descends) 
+		{
+			am.assembly(result);
+		}
+	}
+	this.toDead();
+	return result;
 }
 }
